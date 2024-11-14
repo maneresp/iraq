@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تطبيق مواقيت الصلاة</title>
     <style>
+        /* هنا أضف التنسيق الخاص بك */
         * {
             margin: 0;
             padding: 0;
@@ -29,17 +30,12 @@
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
             width: 90%;
             max-width: 500px;
-            animation: fadeIn 1s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            position: relative;
         }
         h1 {
             font-size: 2em;
             margin-bottom: 10px;
             color: #ffd700;
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         }
         p {
             font-size: 1em;
@@ -56,7 +52,6 @@
             background-color: #333;
             color: #fff;
             outline: none;
-            transition: 0.3s;
         }
         button {
             padding: 12px 25px;
@@ -66,7 +61,6 @@
             color: #fff;
             font-size: 1em;
             cursor: pointer;
-            transition: 0.3s;
         }
         button:hover {
             background-color: #e67e22;
@@ -80,10 +74,6 @@
             color: #ffd700;
             text-decoration: none;
         }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
         /* Icon for the dropdown menu */
         .menu-icon {
             font-size: 30px;
@@ -134,39 +124,64 @@
     </style>
 </head>
 <body>
+    <!-- Menu Icon -->
+    <div class="menu-icon" onclick="openModal()">☰</div>
+
+    <!-- Modal -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>حول التطبيق</h2>
+            <p>هذا التطبيق يوفر مواقيت الصلاة لمدن العراق المختلفة بناءً على الموقع المحدد. يتم تحديث المواقيت يوميًا.</p>
+
+            <h2>من نحن</h2>
+            <p>نحن فريق تطوير تطبيقات الويب نسعى لتوفير حلول تقنية مبتكرة لخدمة المجتمع.</p>
+
+            <h2>سياسة الخصوصية</h2>
+            <p>نحن نحترم خصوصيتك. لا نقوم بتخزين أي بيانات شخصية أثناء استخدامك للتطبيق.</p>
+        </div>
+    </div>
+
     <div class="container">
         <h1>تطبيق مواقيت الصلاة</h1>
+        <p>حدد محافظتك لمعرفة مواقيت الصلاة:</p>
+        <form id="prayerForm">
+            <select name="governorate" id="governorateSelect" required>
+                <option value="" disabled selected>اختر المحافظة</option>
+                <option value="بغداد">بغداد</option>
+                <option value="البصرة">البصرة</option>
+                <option value="أربيل">أربيل</option>
+                <option value="نينوى">نينوى</option>
+                <option value="صلاح الدين">صلاح الدين</option>
+                <option value="الأنبار">الأنبار</option>
+                <option value="دهوك">دهوك</option>
+                <option value="كركوك">كركوك</option>
+                <option value="المثنى">المثنى</option>
+                <option value="ذي قار">ذي قار</option>
+                <option value="ميسان">ميسان</option>
+                <option value="النجف">النجف</option>
+                <option value="القادسية">القادسية</option>
+                <option value="بابل">بابل</option>
+                <option value="كربلاء">كربلاء</option>
+                <option value="واسط">واسط</option>
+                <option value="السليمانية">السليمانية</option>
+            </select>
+            <button type="submit">عرض المواقيت</button>
+        </form>
 
-        <!-- القائمة المنسدلة لاختيار المحافظة -->
-        <p>اختار محافظتك:</p>
-        <select id="citySelector" onchange="showPrayerTimes()">
-            <option value="">اختر المحافظة</option>
-            <option value="بغداد">بغداد</option>
-            <option value="النجف">النجف</option>
-            <option value="البصرة">البصرة</option>
-            <option value="السليمانية">السليمانية</option>
-            <option value="أربيل">أربيل</option>
-            <option value="كربلاء">كربلاء</option>
-            <!-- أضف باقي المحافظات هنا -->
-        </select>
+        <div id="prayerTimes" style="display: none;">
+            <h2>مواقيت الصلاة في <span id="selectedGovernorate"></span></h2>
+            <ul>
+                <li>الفجر: <span id="fajr"></span></li>
+                <li>الظهر: <span id="dhuhr"></span></li>
+                <li>العصر: <span id="asr"></span></li>
+                <li>المغرب: <span id="maghrib"></span></li>
+                <li>العشاء: <span id="isha"></span></li>
+            </ul>
+        </div>
 
-        <button onclick="showPrayerTimes()">عرض المواقيت</button>
-        <div id="prayerTimes"></div>
-
-        <!-- الأيقونة لفتح النافذة المنبثقة -->
-        <button onclick="openModal()">☰</button>
-
-        <!-- نافذة حول التطبيق -->
-        <div id="infoModal">
-            <div class="modal-content">
-                <span class="modal-close" onclick="closeModal()">&times;</span>
-                <h2>حول التطبيق</h2>
-                <p>نحن تطبيق يهدف إلى عرض مواقيت الصلاة للمستخدم بناءً على المدينة المختارة.</p>
-                <h3>من نحن</h3>
-                <p>نحن فريق مكون من مطورين ويب هدفنا تقديم معلومات دينية محدثة بشكل دائم.</p>
-                <h3>سياسة الخصوصية</h3>
-                <p>نحن نحترم خصوصيتك ولا نقوم بتخزين أي بيانات خاصة بك.</p>
-            </div>
+        <div class="footer">
+            <p>القناة الرئيسة على تيليجرام: <a href="https://t.me/python_35" target="_blank">اضغط هنا</a></p>
         </div>
     </div>
 
@@ -181,45 +196,49 @@
             document.getElementById("infoModal").style.display = "none";
         }
 
-        // إغلاق النافذة إذا تم النقر في أي مكان خارج النافذة
+        // إغلاق النافذة المنبثقة إذا تم النقر خارجها
         window.onclick = function(event) {
             if (event.target == document.getElementById("infoModal")) {
                 closeModal();
             }
         }
 
-        // إظهار مواقيت الصلاة عند اختيار المدينة
-        function showPrayerTimes() {
-            var city = document.getElementById("citySelector").value;
-            if (city) {
-                fetch(`http://api.aladhan.com/v1/timingsByCity?city=${city}&country=Iraq&method=4`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.code === 200) {
-                            var timings = data.data.timings;
-                            var prayerTimesHtml = `
-                                <h2>مواقيت الصلاة في ${city}</h2>
-                                <ul>
-                                    <li>الفجر: ${timings.Fajr}</li>
-                                    <li>الظهر: ${timings.Dhuhr}</li>
-                                    <li>العصر: ${timings.Asr}</li>
-                                    <li>المغرب: ${timings.Maghrib}</li>
-                                    <li>العشاء: ${timings.Isha}</li>
-                                </ul>
-                            `;
-                            document.getElementById("prayerTimes").innerHTML = prayerTimesHtml;
-                        } else {
-                            document.getElementById("prayerTimes").innerHTML = "<p>حدث خطأ أثناء تحميل المواقيت.</p>";
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error fetching prayer times:", error);
-                        document.getElementById("prayerTimes").innerHTML = "<p>حدث خطأ أثناء تحميل المواقيت.</p>";
-                    });
-            } else {
-                document.getElementById("prayerTimes").innerHTML = "";
-            }
-        }
+        // جلب مواقيت الصلاة بناءً على المحافظة المحددة
+        document.getElementById('prayerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const governorate = document.getElementById('governorateSelect').value;
+            
+            // URL لطلب البيانات من الـ API
+            const url = `https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(governorate)}&country=Iraq&method=4`;
+            
+            // طلب البيانات باستخدام fetch
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('لم يتم جلب البيانات بنجاح. تحقق من الاتصال بالإنترنت.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.code === 200) {
+                        const prayerTimes = data.data.timings;
+                        document.getElementById('selectedGovernorate').textContent = governorate;
+                        document.getElementById('fajr').textContent = prayerTimes.Fajr;
+                        document.getElementById('dhuhr').textContent = prayerTimes.Dhuhr;
+                        document.getElementById('asr').textContent = prayerTimes.Asr;
+                        document.getElementById('maghrib').textContent = prayerTimes.Maghrib;
+                        document.getElementById('isha').textContent = prayerTimes.Isha;
+                        document.getElementById('prayerTimes').style.display = 'block';
+                    } else {
+                        alert('حدث خطأ في جلب البيانات من الخادم.');
+                    }
+                })
+                .catch(error => {
+                    alert('حدث خطأ أثناء جلب البيانات. يرجى التحقق من الاتصال بالإنترنت والمحاولة مرة أخرى.');
+                    console.error('Error:', error);
+                });
+        });
     </script>
 </body>
-</html>
+</html> 
